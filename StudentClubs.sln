@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentClubs.Api", "StudentClubs.Api\StudentClubs.Api.csproj", "{FD44B426-E3F9-4BBA-BEF5-2E0D19B4EE10}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frontend", "frontend", "{A1A51453-261F-4914-A40D-52B2C57C6165}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentClubs.Desktop", "StudentClubs.Desktop\StudentClubs.Desktop.csproj", "{DD69ED8A-0D2B-41FB-B5A5-D65423A880A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features", "Features", "{D2F2AB08-8DB5-47A0-BA8E-5115252FE62D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SystemMessages", "SystemMessages", "{A0343557-B430-493B-AF9B-600732F037C6}"
+	ProjectSection(SolutionItems) = preProject
+		SystemMessageEndpoints.cs = SystemMessageEndpoints.cs
+		SystemMessageRepository.cs = SystemMessageRepository.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{8F77C3F6-6999-439B-A7B4-7B98D74A1C3F}"
+	ProjectSection(SolutionItems) = preProject
+		OracleConnectionFactory.cs = OracleConnectionFactory.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{81D6AE84-346C-430F-9090-853C64CC0ACE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD44B426-E3F9-4BBA-BEF5-2E0D19B4EE10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD44B426-E3F9-4BBA-BEF5-2E0D19B4EE10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD44B426-E3F9-4BBA-BEF5-2E0D19B4EE10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD44B426-E3F9-4BBA-BEF5-2E0D19B4EE10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD69ED8A-0D2B-41FB-B5A5-D65423A880A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD69ED8A-0D2B-41FB-B5A5-D65423A880A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD69ED8A-0D2B-41FB-B5A5-D65423A880A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD69ED8A-0D2B-41FB-B5A5-D65423A880A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FD44B426-E3F9-4BBA-BEF5-2E0D19B4EE10} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{DD69ED8A-0D2B-41FB-B5A5-D65423A880A0} = {A1A51453-261F-4914-A40D-52B2C57C6165}
+		{D2F2AB08-8DB5-47A0-BA8E-5115252FE62D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A0343557-B430-493B-AF9B-600732F037C6} = {D2F2AB08-8DB5-47A0-BA8E-5115252FE62D}
+		{8F77C3F6-6999-439B-A7B4-7B98D74A1C3F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{81D6AE84-346C-430F-9090-853C64CC0ACE} = {A1A51453-261F-4914-A40D-52B2C57C6165}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {042BCD49-DC17-4F52-AB1A-5ADE875549A2}
+	EndGlobalSection
+EndGlobal
