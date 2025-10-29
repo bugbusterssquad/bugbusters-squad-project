@@ -30,16 +30,13 @@ Backend, "Backend Katmanlı Mimari Oluşturma" task'inde belirtildiği gibi 3 an
 ### Uçtan Uca Veri Akış Diyagramı (DB → API → UI)
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": { "background": "white", "primaryColor": "#ffffff", "edgeLabelBackground": "#ffffff", "tertiaryColor": "#ffffff", "fontSize": "13px", "lineColor": "#333333", "primaryTextColor": "#000000"}}}%%
 flowchart TB
-  %% === Sprint 0 Dikey Akış (DB → API → UI) ===
-
-  %% --- Database ---
   subgraph DB["Database - MySQL"]
     direction TB
     TBL["SystemMessages Tablosu"]
   end
 
-  %% --- Backend ---
   subgraph BE["Backend - .NET Web API (Katmanlı Mimari)"]
     direction TB
     REPO["Repository (DAO)<br/>SystemMessageRepository"]
@@ -47,7 +44,6 @@ flowchart TB
     CTRL["Controller<br/>SystemMessagesController"]
   end
 
-  %% --- UI / Frontend ---
   subgraph UI["UI / Frontend - React + TypeScript"]
     direction TB
     FSVC["Frontend Service (API Client)"]
@@ -55,7 +51,6 @@ flowchart TB
     U["KULLANICI (Tarayıcı)"]
   end
 
-  %% --- Veri Akışı ---
   TBL -->|"1) Veritabanından duyuru çekilir"| REPO
   REPO -->|"2) Servis katmanına veri gönderilir"| SRV
   SRV -->|"3) Controller'a döner"| CTRL
@@ -63,12 +58,10 @@ flowchart TB
   FSVC -->|"5) Duyuru verisi alınır ve işlenir"| BNR
   BNR -->|"6) Mesaj ekranda gösterilir"| U
 
-  %% --- Karar Noktası ve Durumlar ---
   REPO -.->|Hata olursa| ERR["❌ 500 Internal Server Error<br/>Sistem duyurusu yüklenemedi"]
   SRV -->|"Veri boşsa"| NF["⚠️ 404 Not Found<br/>Aktif duyuru bulunamadı"]
   SRV -->|"Veri doluysa"| OK["✅ 200 OK<br/>Çok yakında hizmetinizdeyiz"]
 
-  %% --- Stil ---
   classDef layer fill:#f6f8fa,stroke:#adb5bd,stroke-width:1px,color:#111;
   classDef ok fill:#e8f5e9,stroke:#66bb6a,color:#1b5e20;
   classDef nf fill:#fff8e1,stroke:#ffb74d,color:#e65100;
