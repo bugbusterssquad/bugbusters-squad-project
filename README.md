@@ -1,44 +1,44 @@
-# 🚀 Üniversite Öğrenci Kulübü Uygulaması (Bugbusters Squad)
+# 🚀 Üniversite Öğrenci Kulübü Yönetim Sistemi
 
-Bu proje, "MTH4710 – Yazılım Sektöründe Çevik Dönüşüm ve Uygulama Pratikleri" dersi kapsamında geliştirilen bir üniversite öğrenci kulübü yönetim sistemidir.
+**Takım:** Bugbusters Squad
+**Ders:** MTH4710 – Yazılım Sektöründe Çevik Dönüşüm ve Uygulama Pratikleri
 
-Bu repo, Sprint 0 (İskelet Proje) görevini içermektedir.
+Bu proje, Yıldız Teknik Üniversitesi öğrencilerinin, kulüp yönetiminin ve Öğrenci Kulüpleri Koordinatörlüğü'nün (SKB) ihtiyaçlarını karşılamak üzere tasarlanmış kapsamlı bir kulüp yönetim platformudur.
 
-## 🎯 Sprint 0 Hedefi
+## ✨ Proje Vizyonu
 
-Uçtan uca çalışan minimal bir akış (DB → API → UI) oluşturmak. Veritabanından (MySQL) okunan bir sistem duyurusunu ("Çok yakında hizmetinizdeyiz") C# Backend API üzerinden TypeScript Frontend'de göstermek.
+Projemizin ana hedefi, üniversitedeki kulüp ekosistemini dijitalleştirmektir. Bu platform ile:
+
+* **Öğrenciler:** Kulüplere kolayca üye olabilecek, etkinlik duyurularını takip edebilecek ve üyelik bilgilerini yönetebilecek.
+* **Kulüp Yönetimleri:** Etkinliklerini duyurabilecek, üye takibi yapabilecek ve resmi belgelerini (etkinlik belgesi vb.) sistem üzerinden SKS'ye iletebilecek.
+* **Okul Yönetimi (SKS):** Yeni kulüp başvurularını alıp inceleyebilecek ve kulüplerin faaliyetlerini dijital olarak takip edebilecek.
 
 ## 🛠️ Teknoloji Yığını
 
-* **Backend:** C# (.NET 7 Web API)
+* **Backend:** C# (.NET Web API)
 * **Frontend:** TypeScript (React)
 * **Database:** MySQL
 
+## 🚀 Projenin Durumu
+
+Bu, projemizin ana (`main`) branch'idir ve her zaman stabil, çalışan sürümü içerir. Aktif geliştirme, `feature/...` veya `sprint/...` gibi yan branch'ler üzerinde yapılmakta ve tamamlandığında "Pull Request" (PR) ile `main` branch'ine birleştirilmektedir.
+
 ## 🏃‍♂️ Proje Nasıl Çalıştırılır?
 
-Proje `backend` ve `frontend` olmak üzere iki ana bölümden oluşur. Çalıştırmak için ikisinin de ayakta olması gerekir.
+Projenin kurulum ve çalıştırma detayları için lütfen `docs/` klasöründeki dokümantasyonu veya ilgili sprint branch'indeki `README.md` dosyasını inceleyin.
 
-### 1. Backend (C# / .NET API)
+Genel adımlar:
+1.  `backend/` klasöründeki C# API sunucusunu çalıştırın.
+2.  `frontend/` klasöründeki React uygulamasını çalıştırın.
 
-Backend sunucusunu ayağa kaldırmak için:
+## 📋 Çevik Süreç Takibi
 
-1.  Projenin `backend/` klasörüne gidin.
-2.  `backend/StudentClubs.Api/appsettings.json` dosyasını açın. `ConnectionStrings` bölümünü kendi yerel MySQL sunucunuzun (kullanıcı adı, şifre, port) bilgileriyle güncelleyin.
-3.  (Varsa) Veritabanı tablolarını oluşturmak için terminalde `dotnet ef database update` komutunu çalıştırın.
-4.  API sunucusunu başlatmak için terminalde `dotnet run` komutunu çalıştırın.
-5.  Sunucu varsayılan olarak `http://localhost:5123` (veya benzeri bir portta) çalışmaya başlayacaktır.
-
-### 2. Frontend (TypeScript / React)
-
-Kullanıcı arayüzünü ayağa kaldırmak için:
-
-1.  Yeni bir terminal açın ve projenin `frontend/` klasörüne gidin.
-2.  Gerekli tüm paketleri kurmak için `npm install` komutunu çalıştırın.
-3.  Uygulamayı başlatmak için `npm start` komutunu çalıştırın.
-4.  Uygulama otomatik olarak tarayıcınızda `http://localhost:3000` adresinde açılacaktır. Ekranda sistem duyurusunu görmelisiniz.
-
-## 📋 Jira Süreç Takibi
-
-Projemizin tüm çevik planlaması, Story'ler, Task'ler ve Sub-task'ler Jira bordumuz üzerinden takip edilmektedir:
+Projemizin tüm çevik planlaması (Product Backlog, Sprint Backlog'lar, Story'ler ve Task'ler) Jira bordumuz üzerinden takip edilmektedir:
 
 **https://bugbusterssquad.atlassian.net/jira/software/projects/SCRUM/boards/1**
+
+## 👥 Katkıda Bulunanlar
+
+* @SahinDogruca
+* @darthshadoww
+* @bugbusterssquad (Takım Hesabı)
