@@ -35,4 +35,4 @@ Proje `backend` ve `frontend` olmak üzere iki ana bölümden oluşur.
 ## 📋 Jira Süreç Takibi
 
 Projemizin tüm çevik planlaması Jira bordumuz üzerinden takip edilmektedir:
-[BURAYA JIRA BOARD LİNKİNİ YAPIŞTIR]
+https://bugbusterssquad.atlassian.net/jira/software/projects/SCRUM/boards/1
