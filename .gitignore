@@ -106,6 +106,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-frontend/
+backend/
 
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,macos,windows,visualstudiocode,react
