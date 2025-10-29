@@ -29,7 +29,8 @@ Backend, "Backend Katmanlı Mimari Oluşturma" task'inde belirtildiği gibi 3 an
 
 ### Uçtan Uca Veri Akış Diyagramı (DB → API → UI)
 
-(Buraya veri akış diyagramı eklenecek - Mermaid/Görsel)
+<img width="784" height="1204" alt="image" src="https://github.com/user-attachments/assets/7eb57dc5-cb58-4732-9e6a-67476bb23b6f" />
+
 
 ## 3. Kullanılan API Endpoint ve Örnek JSON
 
