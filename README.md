@@ -1,3 +1,4 @@
+
 # 🚀 Üniversite Öğrenci Kulübü Uygulaması (Bugbusters Squad)
 
 Bu proje, "MTH4710 – Yazılım Sektöründe Çevik Dönüşüm ve Uygulama Pratikleri" dersi kapsamında geliştirilen bir üniversite öğrenci kulübü yönetim sistemidir.
