@@ -90,6 +90,35 @@ flowchart TD
   class NF warn;
   class ERR neg;
 
+  %% === Ok Renkleri ===
+  %% Ana akış okları (mavi)
+  linkStyle 0 stroke:#007bff,stroke-width:2px;
+  linkStyle 1 stroke:#007bff,stroke-width:2px;
+  linkStyle 2 stroke:#007bff,stroke-width:2px;
+  linkStyle 3 stroke:#007bff,stroke-width:2px;
+  linkStyle 4 stroke:#007bff,stroke-width:2px;
+  linkStyle 5 stroke:#007bff,stroke-width:2px;
+  linkStyle 6 stroke:#007bff,stroke-width:2px;
+
+  %% Karar dalları
+  %% Evet → Yeşil
+  linkStyle 7 stroke:#28a745,stroke-width:2px;
+  %% Hayır → Sarı
+  linkStyle 8 stroke:#ffc107,stroke-width:2px;
+
+  %% Hata akışları (kırmızı, noktalı)
+  linkStyle 9 stroke:#dc3545,stroke-width:2px,stroke-dasharray:3 3;
+  linkStyle 10 stroke:#dc3545,stroke-width:2px,stroke-dasharray:3 3;
+  linkStyle 11 stroke:#dc3545,stroke-width:2px,stroke-dasharray:3 3;
+
+  %% Geri dönüş akışları (gri)
+  linkStyle 12 stroke:#6c757d,stroke-width:1.5px;
+  linkStyle 13 stroke:#6c757d,stroke-width:1.5px;
+  linkStyle 14 stroke:#6c757d,stroke-width:1.5px;
+  linkStyle 15 stroke:#6c757d,stroke-width:1.5px;
+  linkStyle 16 stroke:#6c757d,stroke-width:1.5px;
+  linkStyle 17 stroke:#6c757d,stroke-width:1.5px;
+
 ```
 ## 3. Kullanılan API Endpoint ve Örnek JSON
 
