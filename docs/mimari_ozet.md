@@ -30,45 +30,45 @@ Backend, "Backend Katmanlı Mimari Oluşturma" task'inde belirtildiği gibi 3 an
 ### Uçtan Uca Veri Akış Diyagramı (DB → API → UI)
 
 ```mermaid
-flowchart LR
-  %% --- Katmanlar ---
-  subgraph UI["UI / Frontend - React + TypeScript"]
-    direction TB
-    U["KULLANICI (Tarayıcı)"]
-    BNR["SystemAnnouncementBanner"]
-    FSVC["Frontend Service (API Client)"]
-  end
+flowchart TB
+  %% === Sprint 0 Dikey Akış (DB → API → UI) ===
 
-  subgraph BE["Backend - .NET Web API (Katmanlı)"]
-    direction TB
-    CTRL["Controller<br/>SystemMessagesController"]
-    SRV["Service<br/>SystemMessageService"]
-    REPO["Repository (DAO)<br/>SystemMessageRepository"]
-  end
-
+  %% --- Database ---
   subgraph DB["Database - MySQL"]
     direction TB
     TBL["SystemMessages Tablosu"]
   end
 
-  %% --- Akış ---
-  U -->|"1) Sayfa yüklenir"| BNR
-  BNR -->|"2) Duyuruyu getir()"| FSVC
-  FSVC -->|"3) GET /api/system-message"| CTRL
-  CTRL -->|"4) Getir()"| SRV
-  SRV  -->|"5) Aktif duyuru isteği"| REPO
-  REPO -->|"6) SQL sorgusu"| TBL
-  TBL -->|"7) Sorgu sonucu"| HAS{"Aktif duyuru bulundu mu?"}
-  HAS -- "Evet" --> OK["200 OK<br/>Çok yakında hizmetinizdeyiz"]
-  HAS -- "Hayır" --> NF["404 Not Found<br/>Aktif bir sistem duyurusu bulunamadı"]
-  REPO -.-> ERR["500 Internal Server Error<br/>Sistem duyurusu yüklenemedi"]
-  OK --> CTRL
-  NF --> CTRL
-  ERR --> CTRL
-  CTRL -->|"8) HTTP Response (JSON)"| FSVC
-  FSVC -->|"9) Parse"| BNR
-  BNR -->|"10) Mesaj görünür"| U
+  %% --- Backend ---
+  subgraph BE["Backend - .NET Web API (Katmanlı Mimari)"]
+    direction TB
+    REPO["Repository (DAO)<br/>SystemMessageRepository"]
+    SRV["Service<br/>SystemMessageService"]
+    CTRL["Controller<br/>SystemMessagesController"]
+  end
 
+  %% --- UI / Frontend ---
+  subgraph UI["UI / Frontend - React + TypeScript"]
+    direction TB
+    FSVC["Frontend Service (API Client)"]
+    BNR["SystemAnnouncementBanner"]
+    U["KULLANICI (Tarayıcı)"]
+  end
+
+  %% --- Veri Akışı ---
+  TBL -->|"1) Veritabanından duyuru çekilir"| REPO
+  REPO -->|"2) Servis katmanına veri gönderilir"| SRV
+  SRV -->|"3) Controller'a döner"| CTRL
+  CTRL -->|"4) HTTP Response (JSON)"| FSVC
+  FSVC -->|"5) Duyuru verisi alınır ve işlenir"| BNR
+  BNR -->|"6) Mesaj ekranda gösterilir"| U
+
+  %% --- Karar Noktası ve Durumlar ---
+  REPO -.->|Hata olursa| ERR["❌ 500 Internal Server Error<br/>Sistem duyurusu yüklenemedi"]
+  SRV -->|"Veri boşsa"| NF["⚠️ 404 Not Found<br/>Aktif duyuru bulunamadı"]
+  SRV -->|"Veri doluysa"| OK["✅ 200 OK<br/>Çok yakında hizmetinizdeyiz"]
+
+  %% --- Stil ---
   classDef layer fill:#f6f8fa,stroke:#adb5bd,stroke-width:1px,color:#111;
   classDef ok fill:#e8f5e9,stroke:#66bb6a,color:#1b5e20;
   classDef nf fill:#fff8e1,stroke:#ffb74d,color:#e65100;
@@ -78,7 +78,6 @@ flowchart LR
   class NF nf;
   class ERR err;
 ```
-
 ## 3. Kullanılan API Endpoint ve Örnek JSON
 
 Sprint 0 kapsamında sadece bir adet API endpoint'i hazırlanmıştır.
