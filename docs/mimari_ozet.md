@@ -29,8 +29,55 @@ Backend, "Backend Katmanlı Mimari Oluşturma" task'inde belirtildiği gibi 3 an
 
 ### Uçtan Uca Veri Akış Diyagramı (DB → API → UI)
 
-<img width="784" height="1204" alt="image" src="https://github.com/user-attachments/assets/7eb57dc5-cb58-4732-9e6a-67476bb23b6f" />
+```mermaid
+flowchart LR
+  %% --- Katmanlar ---
+  subgraph UI["UI / Frontend - React + TypeScript"]
+    direction TB
+    U["KULLANICI (Tarayıcı)"]
+    BNR["SystemAnnouncementBanner"]
+    FSVC["Frontend Service (API Client)"]
+  end
 
+  subgraph BE["Backend - .NET Web API (Katmanlı)"]
+    direction TB
+    CTRL["Controller<br/>SystemMessagesController"]
+    SRV["Service<br/>SystemMessageService"]
+    REPO["Repository (DAO)<br/>SystemMessageRepository"]
+  end
+
+  subgraph DB["Database - MySQL"]
+    direction TB
+    TBL["SystemMessages Tablosu"]
+  end
+
+  %% --- Akış ---
+  U -->|"1) Sayfa yüklenir"| BNR
+  BNR -->|"2) Duyuruyu getir()"| FSVC
+  FSVC -->|"3) GET /api/system-message"| CTRL
+  CTRL -->|"4) Getir()"| SRV
+  SRV  -->|"5) Aktif duyuru isteği"| REPO
+  REPO -->|"6) SQL sorgusu"| TBL
+  TBL -->|"7) Sorgu sonucu"| HAS{"Aktif duyuru bulundu mu?"}
+  HAS -- "Evet" --> OK["200 OK<br/>Çok yakında hizmetinizdeyiz"]
+  HAS -- "Hayır" --> NF["404 Not Found<br/>Aktif bir sistem duyurusu bulunamadı"]
+  REPO -.-> ERR["500 Internal Server Error<br/>Sistem duyurusu yüklenemedi"]
+  OK --> CTRL
+  NF --> CTRL
+  ERR --> CTRL
+  CTRL -->|"8) HTTP Response (JSON)"| FSVC
+  FSVC -->|"9) Parse"| BNR
+  BNR -->|"10) Mesaj görünür"| U
+
+  classDef layer fill:#f6f8fa,stroke:#adb5bd,stroke-width:1px,color:#111;
+  classDef ok fill:#e8f5e9,stroke:#66bb6a,color:#1b5e20;
+  classDef nf fill:#fff8e1,stroke:#ffb74d,color:#e65100;
+  classDef err fill:#ffebee,stroke:#e57373,color:#b71c1c;
+  class UI,BE,DB layer;
+  class OK ok;
+  class NF nf;
+  class ERR err;
+```
 
 ## 3. Kullanılan API Endpoint ve Örnek JSON
 
