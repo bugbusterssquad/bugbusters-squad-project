@@ -10,29 +10,35 @@ Uçtan uca çalışan minimal bir akış (DB → API → UI) oluşturmak. Verita
 
 ## 🛠️ Teknoloji Yığını
 
-* **Backend:** C# (.NET Web API)
-* **Frontend:** TypeScript (React / Angular / Vue)
+* **Backend:** C# (.NET 7 Web API)
+* **Frontend:** TypeScript (React)
 * **Database:** MySQL
 
 ## 🏃‍♂️ Proje Nasıl Çalıştırılır?
 
-Proje `backend` ve `frontend` olmak üzere iki ana bölümden oluşur.
+Proje `backend` ve `frontend` olmak üzere iki ana bölümden oluşur. Çalıştırmak için ikisinin de ayakta olması gerekir.
 
-### 1. Backend (C#)
+### 1. Backend (C# / .NET API)
 
-(Backend'ci arkadaşınız burayı dolduracak. Örnek:)
-1.  `backend/` klasörüne gidin.
-2.  `appsettings.json` dosyasındaki MySQL bağlantı ayarlarını yapın.
-3.  Terminalde `dotnet run` komutunu çalıştırın.
+Backend sunucusunu ayağa kaldırmak için:
 
-### 2. Frontend (TypeScript)
+1.  Projenin `backend/` klasörüne gidin.
+2.  `backend/StudentClubs.Api/appsettings.json` dosyasını açın. `ConnectionStrings` bölümünü kendi yerel MySQL sunucunuzun (kullanıcı adı, şifre, port) bilgileriyle güncelleyin.
+3.  (Varsa) Veritabanı tablolarını oluşturmak için terminalde `dotnet ef database update` komutunu çalıştırın.
+4.  API sunucusunu başlatmak için terminalde `dotnet run` komutunu çalıştırın.
+5.  Sunucu varsayılan olarak `http://localhost:5123` (veya benzeri bir portta) çalışmaya başlayacaktır.
 
-(Frontend'ci arkadaşınız burayı dolduracak. Örnek:)
-1.  `frontend/` klasörüne gidin.
-2.  Terminalde `npm install` komutunu çalıştırın.
-3.  Terminalde `npm start` komutunu çalıştırın.
+### 2. Frontend (TypeScript / React)
+
+Kullanıcı arayüzünü ayağa kaldırmak için:
+
+1.  Yeni bir terminal açın ve projenin `frontend/` klasörüne gidin.
+2.  Gerekli tüm paketleri kurmak için `npm install` komutunu çalıştırın.
+3.  Uygulamayı başlatmak için `npm start` komutunu çalıştırın.
+4.  Uygulama otomatik olarak tarayıcınızda `http://localhost:3000` adresinde açılacaktır. Ekranda sistem duyurusunu görmelisiniz.
 
 ## 📋 Jira Süreç Takibi
 
-Projemizin tüm çevik planlaması Jira bordumuz üzerinden takip edilmektedir:
-https://bugbusterssquad.atlassian.net/jira/software/projects/SCRUM/boards/1
+Projemizin tüm çevik planlaması, Story'ler, Task'ler ve Sub-task'ler Jira bordumuz üzerinden takip edilmektedir:
+
+**https://bugbusterssquad.atlassian.net/jira/software/projects/SCRUM/boards/1**
