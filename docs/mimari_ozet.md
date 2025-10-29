@@ -30,46 +30,66 @@ Backend, "Backend Katmanlı Mimari Oluşturma" task'inde belirtildiği gibi 3 an
 ### Uçtan Uca Veri Akış Diyagramı (DB → API → UI)
 
 ```mermaid
-%%{init: {"theme": "base", "themeVariables": { "background": "white", "primaryColor": "#ffffff", "edgeLabelBackground": "#ffffff", "tertiaryColor": "#ffffff", "fontSize": "13px", "lineColor": "#333333", "primaryTextColor": "#000000"}}}%%
-flowchart TB
-  subgraph DB["Database - MySQL"]
-    direction TB
+flowchart TD
+  %% === YTÜ Sprint 0 - Minimal Akış (DB → API → UI) ===
+
+  %% === UI Katmanı ===
+  subgraph UI["UI / Frontend - React + TypeScript"]
+    U["KULLANICI (Tarayıcı)"]
+    BNR["SystemAnnouncementBanner Bileşeni"]
+    FSVC["Frontend Service (API Client)"]
+  end
+
+  %% === Backend Katmanı ===
+  subgraph BE["Backend (.NET Web API) - Katmanlı Mimari"]
+    CTRL["Controller Katmanı<br/>SystemMessagesController"]
+    SRV["Service Katmanı<br/>SystemMessageService"]
+    REPO["Repository (DAO) Katmanı<br/>SystemMessageRepository"]
+  end
+
+  %% === Veritabanı Katmanı ===
+  subgraph DB["MySQL Veritabanı"]
     TBL["SystemMessages Tablosu"]
   end
 
-  subgraph BE["Backend - .NET Web API (Katmanlı Mimari)"]
-    direction TB
-    REPO["Repository (DAO)<br/>SystemMessageRepository"]
-    SRV["Service<br/>SystemMessageService"]
-    CTRL["Controller<br/>SystemMessagesController"]
-  end
+  %% === Ana Akış ===
+  U -->|"1) Sayfa yüklenir"| BNR
+  BNR -->|"2) Duyuruyu getir()"| FSVC
+  FSVC -->|"3) HTTP GET /api/system-message"| CTRL
+  CTRL -->|"4) Getir() metodu çağrılır"| SRV
+  SRV -->|"5) Aktif duyuru isteği yapılır"| REPO
+  REPO -->|"6) SQL sorgusu:<br/>SELECT * FROM SystemMessages<br/>WHERE isActive=1<br/>ORDER BY createdAt DESC<br/>LIMIT 1"| TBL
 
-  subgraph UI["UI / Frontend - React + TypeScript"]
-    direction TB
-    FSVC["Frontend Service (API Client)"]
-    BNR["SystemAnnouncementBanner"]
-    U["KULLANICI (Tarayıcı)"]
-  end
+  %% === Karar Noktası ===
+  TBL -->|"7) Sorgu sonucu döner"| HAS{"Aktif duyuru bulundu mu?"}
 
-  TBL -->|"1) Veritabanından duyuru çekilir"| REPO
-  REPO -->|"2) Servis katmanına veri gönderilir"| SRV
-  SRV -->|"3) Controller'a döner"| CTRL
-  CTRL -->|"4) HTTP Response (JSON)"| FSVC
-  FSVC -->|"5) Duyuru verisi alınır ve işlenir"| BNR
-  BNR -->|"6) Mesaj ekranda gösterilir"| U
+  HAS -- "Evet" --> OK["✅ 200 OK<br/>Çok yakında hizmetinizdeyiz"]
+  HAS -- "Hayır" --> NF["⚠️ 404 Not Found<br/>Aktif bir sistem duyurusu bulunamadı"]
 
-  REPO -.->|Hata olursa| ERR["❌ 500 Internal Server Error<br/>Sistem duyurusu yüklenemedi"]
-  SRV -->|"Veri boşsa"| NF["⚠️ 404 Not Found<br/>Aktif duyuru bulunamadı"]
-  SRV -->|"Veri doluysa"| OK["✅ 200 OK<br/>Çok yakında hizmetinizdeyiz"]
+  %% === Hata Akışı ===
+  REPO -.->|Veritabanı hatası| ERR["❌ 500 Internal Server Error<br/>Sistem duyurusu yüklenemedi"]
+  SRV -.->|İş mantığı hatası| ERR
+  CTRL -.->|Global Exception Middleware| ERR
 
+  %% === Geri Dönüş Akışı ===
+  OK --> CTRL
+  NF --> CTRL
+  ERR --> CTRL
+  CTRL -->|"8) HTTP Response (JSON)"| FSVC
+  FSVC -->|"9) JSON parse edilir"| BNR
+  BNR -->|"10) Mesaj ekranda gösterilir"| U
+
+  %% === Stil Tanımları ===
   classDef layer fill:#f6f8fa,stroke:#adb5bd,stroke-width:1px,color:#111;
-  classDef ok fill:#e8f5e9,stroke:#66bb6a,color:#1b5e20;
-  classDef nf fill:#fff8e1,stroke:#ffb74d,color:#e65100;
-  classDef err fill:#ffebee,stroke:#e57373,color:#b71c1c;
+  classDef pos fill:#e8f5e9,stroke:#66bb6a,color:#1b5e20;
+  classDef neg fill:#ffebee,stroke:#e57373,color:#b71c1c;
+  classDef warn fill:#fff8e1,stroke:#ffb74d,color:#e65100;
+
   class UI,BE,DB layer;
-  class OK ok;
-  class NF nf;
-  class ERR err;
+  class OK pos;
+  class NF warn;
+  class ERR neg;
+
 ```
 ## 3. Kullanılan API Endpoint ve Örnek JSON
 
