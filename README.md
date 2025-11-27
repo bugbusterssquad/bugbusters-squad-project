@@ -22,6 +22,55 @@ Bu sprintte projenin temel kullanıcı etkileşimleri geliştirilmiştir:
 * **Etkinlik Yönetimi:** Kulüplerin düzenlediği etkinliklerin listelenmesi ve katılım butonu.
 * [cite_start]**Üyelik Başvurusu:** Öğrencilerin kulüplere "Üye Ol" isteği gönderebilmesi[cite: 1781].
 
+## 🗄️ Veritabanı Tasarımı (Sprint 1.0 MVP)
+
+Bu proje **Agile (Çevik)** prensiplerle geliştirilmektedir. Bu nedenle veritabanı tasarımımız **"Evrimsel Veritabanı Tasarımı"** (Evolutionary Database Design) yaklaşımıyla hazırlanmıştır.
+
+Şu anki **Sprint 1.0** hedefimiz sadece şunlardır:
+1. Öğrencilerin sisteme kaydolması.
+2. Kulüplerin listelenmesi.
+3. Etkinliklerin görüntülenmesi.
+
+Bu nedenle veritabanında **"Membership" (Üyelik)** gibi tablolar bilinçli olarak **bulunmamaktadır**. Bu özellikler Sprint 1.1 kapsamındadır ve zamanı geldiğinde eklenecektir (YAGNI Prensibi).
+
+### 📷 ER Diyagramı Görseli
+![Sprint 1 ER Model](mermaid-diagram-2025-11-27-101829.png)
+
+### 🛠️ Yapısal Detaylar (Mermaid Kodu)
+Geliştirici ekibin üzerinde çalışması ve ileride düzenlemesi için şema kodumuz:
+
+```mermaid
+erDiagram
+    %% SPRINT 1.0 KAPSAMI
+    
+    USER {
+        int id PK "Öğrenci ID"
+        string fullName "Ad Soyad"
+        string schoolNumber "Okul Numarası"
+        string email "Okul E-postası"
+        string password "Şifre"
+    }
+
+    CLUB {
+        int id PK "Kulüp ID"
+        string name "Kulüp Adı"
+        string description "Kulüp Açıklaması"
+        string logoUrl "Logo Görseli"
+        string category "Kategori"
+    }
+
+    EVENT {
+        int id PK "Etkinlik ID"
+        int club_id FK "Düzenleyen Kulüp"
+        string title "Etkinlik Başlığı"
+        string description "Detaylar"
+        datetime eventDate "Tarih ve Saat"
+        string location "Konum"
+    }
+
+    %% İLİŞKİLER
+    CLUB ||--o{ EVENT : "düzenler"
+```
 ---
 
 ## 🛠️ Teknoloji Yığını
