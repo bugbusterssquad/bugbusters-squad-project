@@ -1,45 +1,77 @@
+# 🚀 Üniversite Öğrenci Kulübü Uygulaması (BugBusters Squad)
 
-# 🚀 Üniversite Öğrenci Kulübü Uygulaması (Bugbusters Squad)
+Bu proje, **"MTH4710 – Yazılım Sektöründe Çevik Dönüşüm ve Uygulama Pratikleri"** dersi kapsamında geliştirilen, öğrencilerin kulüplere katılımını ve etkileşimini dijitalleştiren bir yönetim sistemidir.
 
-Bu proje, "MTH4710 – Yazılım Sektöründe Çevik Dönüşüm ve Uygulama Pratikleri" dersi kapsamında geliştirilen bir üniversite öğrenci kulübü yönetim sistemidir.
+## 📅 Proje Durumu ve Sprint İlerleyişi
 
-Bu repo, Sprint 0 (İskelet Proje) görevini içermektedir.
+Projemiz Çevik (Agile) prensiplerle, **2 Haftalık Sprintler** halinde geliştirilmektedir.
 
-## 🎯 Sprint 0 Hedefi
+### ✅ Sprint 0: İskelet Proje (Tamamlandı)
+* **Hedef:** Uçtan uca çalışan minimal bir akış (DB → API → UI) oluşturmak.
+* **Çıktı:** Veritabanından okunan sistem duyurusunun arayüzde gösterilmesi sağlandı.
 
-Uçtan uca çalışan minimal bir akış (DB → API → UI) oluşturmak. Veritabanından (MySQL) okunan bir sistem duyurusunu ("Çok yakında hizmetinizdeyiz") C# Backend API üzerinden TypeScript Frontend'de göstermek.
+### ✅ Sprint 1: Temel Fonksiyonlar (Tamamlandı - Mevcut Sürüm)
+Bu sprintte projenin temel kullanıcı etkileşimleri geliştirilmiştir:
+* [cite_start]**🔐 Kullanıcı Girişi (Login):** Öğrencilerin kullanıcı adı ve şifre ile sisteme güvenli giriş yapabilmesi sağlandı [cite: 101-104].
+* **📋 Kulüp Listeleme:** Veritabanına kayıtlı öğrenci kulüplerinin (İsim, Logo, Açıklama) ana sayfada listelenmesi tamamlandı.
+* **Teknik Altyapı:** Entity Framework modelleri (User, Club) ve Controller yapıları kuruldu.
+
+### 🔜 Sprint 2: Detaylar ve Etkinlikler (Planlandı)
+Önümüzdeki sprintte hedeflenen özellikler:
+* **Kulüp Detay Sayfası:** Seçilen kulübün detaylı bilgilerinin görüntülenmesi.
+* **Etkinlik Yönetimi:** Kulüplerin düzenlediği etkinliklerin listelenmesi ve katılım butonu.
+* [cite_start]**Üyelik Başvurusu:** Öğrencilerin kulüplere "Üye Ol" isteği gönderebilmesi[cite: 1781].
+
+---
 
 ## 🛠️ Teknoloji Yığını
 
 * **Backend:** C# (.NET 7 Web API)
 * **Frontend:** TypeScript (React)
 * **Database:** MySQL
+* **ORM:** Entity Framework Core
+* **Süreç Yönetimi:** Jira & GitHub
 
 ## 🏃‍♂️ Proje Nasıl Çalıştırılır?
 
-Proje `backend` ve `frontend` olmak üzere iki ana bölümden oluşur. Çalıştırmak için ikisinin de ayakta olması gerekir.
+Proje `backend` ve `frontend` olmak üzere iki ana bölümden oluşur. Güncel kod `main` branch'inde bulunmaktadır.
 
 ### 1. Backend (C# / .NET API)
 
-Backend sunucusunu ayağa kaldırmak için:
+Backend sunucusunu ayağa kaldırmak ve veritabanını güncellemek için:
 
 1.  Projenin `backend/` klasörüne gidin.
-2.  `backend/StudentClubs.Api/appsettings.json` dosyasını açın. `ConnectionStrings` bölümünü kendi yerel MySQL sunucunuzun (kullanıcı adı, şifre, port) bilgileriyle güncelleyin.
-3.  (Varsa) Veritabanı tablolarını oluşturmak için terminalde `dotnet ef database update` komutunu çalıştırın.
-4.  API sunucusunu başlatmak için terminalde `dotnet run` komutunu çalıştırın.
-5.  Sunucu varsayılan olarak `http://localhost:5123` (veya benzeri bir portta) çalışmaya başlayacaktır.
+2.  `appsettings.json` dosyasındaki `ConnectionStrings` bölümünü kendi yerel MySQL bilgilerinizle güncelleyin.
+3.  **Önemli:** Yeni eklenen tabloları (Users, Clubs) oluşturmak için migration komutunu çalıştırın:
+    ```bash
+    dotnet ef database update
+    ```
+4.  API sunucusunu başlatın:
+    ```bash
+    dotnet run
+    ```
+5.  Sunucu `http://localhost:5123` adresinde çalışacaktır.
 
 ### 2. Frontend (TypeScript / React)
 
 Kullanıcı arayüzünü ayağa kaldırmak için:
 
-1.  Yeni bir terminal açın ve projenin `frontend/` klasörüne gidin.
-2.  Gerekli tüm paketleri kurmak için `npm install` komutunu çalıştırın.
-3.  Uygulamayı başlatmak için `npm start` komutunu çalıştırın.
-4.  Uygulama otomatik olarak tarayıcınızda `http://localhost:3000` adresinde açılacaktır. Ekranda sistem duyurusunu görmelisiniz.
+1.  Yeni bir terminal açın ve `frontend/` klasörüne gidin.
+2.  Paketleri yükleyin:
+    ```bash
+    npm install
+    ```
+3.  Uygulamayı başlatın:
+    ```bash
+    npm start
+    ```
+4.  Tarayıcınızda `http://localhost:3000` adresine giderek Login ekranını ve Kulüp Listesini görebilirsiniz.
 
 ## 📋 Jira Süreç Takibi
 
-Projemizin tüm çevik planlaması, Story'ler, Task'ler ve Sub-task'ler Jira bordumuz üzerinden takip edilmektedir:
+Projemizin tüm çevik planlaması, User Story'ler, Task'ler ve Sprint Burndown grafikleri Jira bordumuz üzerinden şeffaf bir şekilde takip edilmektedir:
 
-**https://bugbusterssquad.atlassian.net/jira/software/projects/SCRUM/boards/1**
+🔗 **[BugBusters Jira Board](https://bugbusterssquad.atlassian.net/jira/software/projects/SCRUM/boards/1)**
+
+---
+*Geliştirici Ekip: BugBusters Squad*
