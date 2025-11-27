@@ -114,7 +114,7 @@ Kullanıcı arayüzünü ayağa kaldırmak için:
     ```bash
     npm start
     ```
-4.  Tarayıcınızda `http://localhost:5123` adresine giderek Login ekranını ve Kulüp Listesini görebilirsiniz.
+4.  Tarayıcınızda `http://localhost:5173` adresine giderek Login ekranını ve Kulüp Listesini görebilirsiniz.
 
 ## 📋 Jira Süreç Takibi
 
