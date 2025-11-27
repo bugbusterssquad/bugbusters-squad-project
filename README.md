@@ -50,7 +50,7 @@ Backend sunucusunu ayağa kaldırmak ve veritabanını güncellemek için:
     ```bash
     dotnet run
     ```
-5.  Sunucu `http://localhost:5123` adresinde çalışacaktır.
+5.  Sunucu `http://localhost:3000` adresinde çalışacaktır.
 
 ### 2. Frontend (TypeScript / React)
 
@@ -65,7 +65,7 @@ Kullanıcı arayüzünü ayağa kaldırmak için:
     ```bash
     npm start
     ```
-4.  Tarayıcınızda `http://localhost:3000` adresine giderek Login ekranını ve Kulüp Listesini görebilirsiniz.
+4.  Tarayıcınızda `http://localhost:5123` adresine giderek Login ekranını ve Kulüp Listesini görebilirsiniz.
 
 ## 📋 Jira Süreç Takibi
 
