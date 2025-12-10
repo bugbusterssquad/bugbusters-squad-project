@@ -8,7 +8,8 @@ Env.Load();
 
 var dbUser = Environment.GetEnvironmentVariable("DB_USER");
 var dbPass = Environment.GetEnvironmentVariable("DB_PASS");
-var apiAddr = Environment.GetEnvironmentVariable("API_ADDR");
+var apiAddr = Environment.GetEnvironmentVariable("API_ADDR"); 
+// ÖRNEK: http://localhost:5173
 
 var cs = $"{builder.Configuration.GetConnectionString("DefaultConnection")}User Id={dbUser};Password={dbPass};";
 
@@ -22,13 +23,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Frontend (Vite varsayılan: 5173) için CORS
-builder.Services.AddCors(opt =>
+// -----------------------------------------
+// 🔥 CORS DÜZELTİLMİŞ
+// -----------------------------------------
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("frontend", p => p
-        .WithOrigins(apiAddr)
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+    options.AddPolicy("frontend", policy =>
+    {
+        policy
+            .WithOrigins(apiAddr!)     // tek kaynak veya env üzerinden liste
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();       // parametresiz!
+    });
 });
 
 var app = builder.Build();
@@ -36,7 +43,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// HTTP kullanıyoruz; UseHttpsRedirection'ı kaldırdık
+// CORS middleware
 app.UseCors("frontend");
 
 app.MapControllers();
