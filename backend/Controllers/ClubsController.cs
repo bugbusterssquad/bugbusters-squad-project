@@ -1,4 +1,5 @@
 using ClubsApi.Data;
+using ClubsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,20 +9,28 @@ namespace ClubsApi.Controllers;
 [Route("api/[controller]")]
 public class ClubsController(AppDbContext db) : ControllerBase
 {
-    public record ClubDto(string Name, string Message);
+    public record ClubListDto(int Id, string Name);
+    public record ClubDetailDto(int Id, string Name, string? Mission, string? Management, string? Contact);
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClubDto>>> Get()
+    public async Task<ActionResult<IEnumerable<ClubListDto>>> Get()
     {
-        var clubs = await db.Clubs.AsNoTracking()
-                                  .OrderBy(c => c.Id)
-                                  .ToListAsync();
+        var clubs = await db.Clubs.OrderBy(c => c.Id).ToListAsync();
+        return Ok(clubs.Select(c => new ClubListDto(c.Id, c.Name)));
+    }
 
-        var result = clubs.Select(c => new ClubDto(
-            c.Name,
-            $"{c.Name}: yakında hizmetinizdeyiz"
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ClubDetailDto>> GetById(int id)
+    {
+        var club = await db.Clubs.FindAsync(id);
+        if (club == null) return NotFound("Kulüp bulunamadı.");
+
+        return Ok(new ClubDetailDto(
+            club.Id,
+            club.Name,
+            club.Mission,
+            club.Management,
+            club.Contact
         ));
-
-        return Ok(result);
     }
 }

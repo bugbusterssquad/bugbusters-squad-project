@@ -23,24 +23,25 @@ public class AuthController(AppDbContext db) : ControllerBase
         {
             Name = request.Name,
             Email = request.Email,
-            Password = request.Password 
+            Password = request.Password
         };
 
         db.Users.Add(newUser);
-        await db.SaveChangesAsync(); // DÜZELTİLDİ: await ile db arasına boşluk kondu
-
+        await db.SaveChangesAsync();
         return Ok(new { message = "Kayıt başarılı!" });
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto request)
     {
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email && u.Password == request.Password);
+        var user = await db.Users.FirstOrDefaultAsync(
+            u => u.Email == request.Email && u.Password == request.Password
+        );
 
         if (user == null)
             return Unauthorized("Email veya şifre hatalı.");
 
-        return Ok(new { id = user.Id, name = user.Name, email = user.Email });
+        return Ok(new { id = user.Id, name = user.Name, user.Email });
     }
 
     [HttpPost("reset-password")]
