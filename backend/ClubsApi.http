@@ -1,6 +1,70 @@
-@ClubsApi_HostAddress = http://localhost:5058
+@ClubsApi_HostAddress = http://localhost:5084
+@AuthToken = YOUR_TOKEN_HERE
 
-GET {{ClubsApi_HostAddress}}/weatherforecast/
-Accept: application/json
+### Auth - Register (student)
+POST {{ClubsApi_HostAddress}}/api/auth/register
+Content-Type: application/json
 
-###
+{
+  "name": "Test User",
+  "email": "test@bugbusters.dev",
+  "password": "Test1234!"
+}
+
+### Auth - Login
+POST {{ClubsApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "student@bugbusters.dev",
+  "password": "Student123!"
+}
+
+### Clubs - Options
+GET {{ClubsApi_HostAddress}}/api/clubs/options
+
+### Clubs - List
+GET {{ClubsApi_HostAddress}}/api/clubs?page=1&pageSize=9
+
+### Clubs - Detail
+GET {{ClubsApi_HostAddress}}/api/clubs/1
+
+### Events - List
+GET {{ClubsApi_HostAddress}}/api/events?page=1&pageSize=10
+
+### Events - Detail
+GET {{ClubsApi_HostAddress}}/api/events/1
+
+### Event Registration (student)
+POST {{ClubsApi_HostAddress}}/api/events/1/registrations
+Authorization: Bearer {{AuthToken}}
+
+### Club Membership Apply (student)
+POST {{ClubsApi_HostAddress}}/api/clubs/1/applications
+Authorization: Bearer {{AuthToken}}
+Content-Type: application/json
+
+{
+  "note": "Başvuruyorum"
+}
+
+### SKS Club Applications (club admin submit)
+POST {{ClubsApi_HostAddress}}/api/sks/club-applications
+Authorization: Bearer {{AuthToken}}
+Content-Type: application/json
+
+{
+  "clubId": 1
+}
+
+### SKS Club Applications (sks admin list)
+GET {{ClubsApi_HostAddress}}/api/sks/club-applications?status=Pending
+Authorization: Bearer {{AuthToken}}
+
+### SKS Event Documents (sks admin list)
+GET {{ClubsApi_HostAddress}}/api/sks/event-documents?status=Pending
+Authorization: Bearer {{AuthToken}}
+
+### Admin Stats (sks admin)
+GET {{ClubsApi_HostAddress}}/api/admin/stats
+Authorization: Bearer {{AuthToken}}

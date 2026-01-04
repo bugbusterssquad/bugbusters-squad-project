@@ -1,20 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { api } from "../services/api";
 import { useNavigate } from "react-router";
-
-function getUser() {
-  const raw = localStorage.getItem("clubs_user");
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-}
+import { getUser } from "../services/auth";
+import { getErrorMessage } from "../utils/error";
 
 export default function MembershipApply({ clubId }: { clubId: number }) {
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [note, setNote] = useState("");
   const navigate = useNavigate();
   const user = getUser();
 
@@ -26,10 +19,10 @@ export default function MembershipApply({ clubId }: { clubId: number }) {
 
     try {
       setLoading(true);
-      const res = await api.applyMembership(user.id, clubId);
+      const res = await api.applyMembership(clubId, note.trim() || undefined);
       setStatus(res.message ?? "Başvuru yapıldı.");
-    } catch (e: any) {
-      setStatus(e.message || "Başvuru başarısız.");
+    } catch (e) {
+      setStatus(getErrorMessage(e, "Başvuru başarısız."));
     } finally {
       setLoading(false);
     }
@@ -39,6 +32,17 @@ export default function MembershipApply({ clubId }: { clubId: number }) {
     <div className="bg-white p-6 rounded-md shadow">
       <h3 className="text-lg font-semibold">Bu kulübe üye olmak ister misin?</h3>
       <p className="text-gray-600 mt-2">Üyelik başvurusu göndererek kulüple iletişime geçersin. Onaylandığında dijital üye kartın profilinde görünecektir.</p>
+
+      <label className="block mt-4 text-sm text-gray-600">
+        Başvuru notu (opsiyonel)
+        <textarea
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="mt-2 w-full border rounded p-2"
+          rows={3}
+          placeholder="Kendini kısaca tanıtabilirsin."
+        />
+      </label>
 
       <div className="mt-4 flex items-center gap-3">
         <button onClick={apply} disabled={loading} className="px-4 py-2 bg-accent rounded shadow-sm">

@@ -2,7 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubsApi", "ClubsApi\ClubsApi.csproj", "{2E5D2FEF-9090-CB92-E971-FA9A6D8B3803}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubsApi", "backend\\ClubsApi.csproj", "{2E5D2FEF-9090-CB92-E971-FA9A6D8B3803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubsApi.Tests", "backend\\ClubsApi.Tests\\ClubsApi.Tests.csproj", "{FBD3EE9C-560B-42C3-8397-337D63C1AEF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,6 +16,10 @@ Global
 		{2E5D2FEF-9090-CB92-E971-FA9A6D8B3803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E5D2FEF-9090-CB92-E971-FA9A6D8B3803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E5D2FEF-9090-CB92-E971-FA9A6D8B3803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD3EE9C-560B-42C3-8397-337D63C1AEF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD3EE9C-560B-42C3-8397-337D63C1AEF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD3EE9C-560B-42C3-8397-337D63C1AEF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD3EE9C-560B-42C3-8397-337D63C1AEF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

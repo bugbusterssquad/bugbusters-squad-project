@@ -1,23 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-
-function getUserFromStorage() {
-  const raw = localStorage.getItem("clubs_user");
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-}
+import { clearAuth, getUser } from "../services/auth";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
-  const user = getUserFromStorage();
+  const user = getUser();
   const navigate = useNavigate();
 
   function logout() {
-    localStorage.removeItem("clubs_user");
+    clearAuth();
     navigate("/");
   }
 
@@ -36,6 +27,7 @@ export default function NavBar() {
 
         <nav className="hidden md:flex items-center gap-4">
           <Link to="/" className="hover:text-accent">Kulüpler</Link>
+          <Link to="/events" className="hover:text-accent">Etkinlikler</Link>
           {!user && (
             <>
               <Link to="/login" className="text-sm px-4 py-2 border rounded">Giriş</Link>
@@ -44,6 +36,12 @@ export default function NavBar() {
           )}
           {user && (
             <>
+              {(user.role === "ClubAdmin" || user.role === "SuperAdmin") && (
+                <Link to="/admin" className="text-sm px-3 py-2 border rounded">Admin</Link>
+              )}
+              {(user.role === "SksAdmin" || user.role === "SuperAdmin") && (
+                <Link to="/sks" className="text-sm px-3 py-2 border rounded">SKS</Link>
+              )}
               <Link to="/profile" className="text-sm px-3 py-2 border rounded">{user.name}</Link>
               <button onClick={logout} className="text-sm px-3 py-2 border rounded">Çıkış</button>
             </>
@@ -68,13 +66,20 @@ export default function NavBar() {
         <div className="md:hidden bg-white border-t">
           <div className="px-4 py-3 flex flex-col gap-2">
             <Link to="/" onClick={() => setOpen(false)} className="py-2">Kulüpler</Link>
+            <Link to="/events" onClick={() => setOpen(false)} className="py-2">Etkinlikler</Link>
             {!user && <>
               <Link to="/login" onClick={() => setOpen(false)} className="py-2">Giriş</Link>
               <Link to="/register" onClick={() => setOpen(false)} className="py-2">Kayıt Ol</Link>
             </>}
             {user && <>
+              {(user.role === "ClubAdmin" || user.role === "SuperAdmin") && (
+                <Link to="/admin" onClick={() => setOpen(false)} className="py-2">Admin</Link>
+              )}
+              {(user.role === "SksAdmin" || user.role === "SuperAdmin") && (
+                <Link to="/sks" onClick={() => setOpen(false)} className="py-2">SKS</Link>
+              )}
               <Link to="/profile" onClick={() => setOpen(false)} className="py-2">{user.name}</Link>
-              <button onClick={() => { localStorage.removeItem("clubs_user"); setOpen(false); }} className="py-2 text-left">Çıkış</button>
+              <button onClick={() => { clearAuth(); setOpen(false); }} className="py-2 text-left">Çıkış</button>
             </>}
           </div>
         </div>

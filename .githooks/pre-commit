@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Running frontend lint..."
+(cd frontend && npm run lint)
+
+echo "Running backend tests..."
+dotnet test StudentClubs.sln

@@ -108,5 +108,8 @@ $RECYCLE.BIN/
 
 .idea/
 .env
+.logs/
+/backend/.env
+/frontend/dist
 
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,macos,windows,visualstudiocode,react
