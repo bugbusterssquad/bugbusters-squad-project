@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { api } from "../services/api";
 import { getUser } from "../services/auth";
@@ -11,11 +11,21 @@ export default function AdminDashboard() {
   const userRole = user?.role ?? null;
   const navigate = useNavigate();
 
+  const documentRef = useRef<HTMLInputElement>(null);
+
   const [clubs, setClubs] = useState<{ id: number; name: string }[]>([]);
   const [selectedClubId, setSelectedClubId] = useState<number | null>(null);
   const [events, setEvents] = useState<AdminEvent[]>([]);
   const [applications, setApplications] = useState<
-    { id: number; userId: number; userName: string; userEmail: string; status: string; note?: string | null; createdAt: string }[]
+    {
+      id: number;
+      userId: number;
+      userName: string;
+      userEmail: string;
+      status: string;
+      note?: string | null;
+      createdAt: string;
+    }[]
   >([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -27,17 +37,21 @@ export default function AdminDashboard() {
     location: "",
     startAt: "",
     endAt: "",
-    capacity: "0"
+    capacity: "0",
   });
 
   const [announcementForm, setAnnouncementForm] = useState({
     title: "",
     content: "",
-    status: "Published"
+    status: "Published",
   });
 
-  const [applicationNotes, setApplicationNotes] = useState<Record<number, string>>({});
-  const [clubApplicationMessage, setClubApplicationMessage] = useState<string | null>(null);
+  const [applicationNotes, setApplicationNotes] = useState<
+    Record<number, string>
+  >({});
+  const [clubApplicationMessage, setClubApplicationMessage] = useState<
+    string | null
+  >(null);
   const [documentEventId, setDocumentEventId] = useState<string>("");
   const [documentFile, setDocumentFile] = useState<File | null>(null);
   const [documentMessage, setDocumentMessage] = useState<string | null>(null);
@@ -74,7 +88,7 @@ export default function AdminDashboard() {
         const [eventData, appData, announcementData] = await Promise.all([
           api.listAdminEvents(selectedClubId),
           api.listClubApplications(selectedClubId),
-          api.listAdminAnnouncements(selectedClubId)
+          api.listAdminAnnouncements(selectedClubId),
         ]);
         setEvents(eventData);
         setApplications(appData);
@@ -85,7 +99,10 @@ export default function AdminDashboard() {
     })();
   }, [selectedClubId]);
 
-  const selectedClub = useMemo(() => clubs.find((club) => club.id === selectedClubId), [clubs, selectedClubId]);
+  const selectedClub = useMemo(
+    () => clubs.find((club) => club.id === selectedClubId),
+    [clubs, selectedClubId]
+  );
 
   async function handleCreateEvent(e: React.FormEvent) {
     e.preventDefault();
@@ -98,11 +115,18 @@ export default function AdminDashboard() {
         location: eventForm.location || null,
         startAt: new Date(eventForm.startAt).toISOString(),
         endAt: new Date(eventForm.endAt).toISOString(),
-        capacity: Number(eventForm.capacity)
+        capacity: Number(eventForm.capacity),
       });
       const data = await api.listAdminEvents(selectedClubId);
       setEvents(data);
-      setEventForm({ title: "", description: "", location: "", startAt: "", endAt: "", capacity: "0" });
+      setEventForm({
+        title: "",
+        description: "",
+        location: "",
+        startAt: "",
+        endAt: "",
+        capacity: "0",
+      });
     } catch (e) {
       setError(getErrorMessage(e));
     }
@@ -132,12 +156,15 @@ export default function AdminDashboard() {
     }
   }
 
-  async function handleToggleAnnouncement(announcement: Announcement, status: string) {
+  async function handleToggleAnnouncement(
+    announcement: Announcement,
+    status: string
+  ) {
     try {
       await api.updateAnnouncement(announcement.id, {
         title: announcement.title,
         content: announcement.content,
-        status
+        status,
       });
       if (!selectedClubId) return;
       const data = await api.listAdminAnnouncements(selectedClubId);
@@ -147,7 +174,10 @@ export default function AdminDashboard() {
     }
   }
 
-  async function handleApplicationAction(id: number, status: "Approved" | "Rejected") {
+  async function handleApplicationAction(
+    id: number,
+    status: "Approved" | "Rejected"
+  ) {
     try {
       const note = applicationNotes[id];
       await api.updateClubApplication(id, status, note);
@@ -172,10 +202,16 @@ export default function AdminDashboard() {
 
   async function handleUploadDocument(e: React.FormEvent) {
     e.preventDefault();
-    if (!documentEventId || !documentFile) return;
+    if (!documentEventId || !documentFile) {
+      setDocumentMessage("Lütfen Belge Yükleyiniz!!");
+      return;
+    }
     try {
       setDocumentMessage(null);
-      const res = await api.uploadEventDocument(Number(documentEventId), documentFile);
+      const res = await api.uploadEventDocument(
+        Number(documentEventId),
+        documentFile
+      );
       setDocumentMessage(res.message);
       setDocumentFile(null);
     } catch (e) {
@@ -189,7 +225,9 @@ export default function AdminDashboard() {
     <div className="max-w-5xl mx-auto space-y-8">
       <div className="bg-white p-6 rounded-md shadow">
         <h2 className="text-2xl font-bold">Kulüp Admin Paneli</h2>
-        <p className="text-gray-600 mt-1">{selectedClub?.name ?? "Kulüp seç"}</p>
+        <p className="text-gray-600 mt-1">
+          {selectedClub?.name ?? "Kulüp seç"}
+        </p>
         {error && <div className="text-red-500 mt-2">{error}</div>}
         <div className="mt-4">
           <select
@@ -199,15 +237,25 @@ export default function AdminDashboard() {
             aria-label="Kulüp seçimi"
           >
             {clubs.map((club) => (
-              <option key={club.id} value={club.id}>{club.name}</option>
+              <option key={club.id} value={club.id}>
+                {club.name}
+              </option>
             ))}
           </select>
         </div>
         <div className="mt-4">
-          <button onClick={handleSubmitClubApplication} className="px-4 py-2 border rounded" data-testid="admin-sks-submit">
+          <button
+            onClick={handleSubmitClubApplication}
+            className="px-4 py-2 border rounded"
+            data-testid="admin-sks-submit"
+          >
             SKS Başvurusu Gönder
           </button>
-          {clubApplicationMessage && <p className="text-sm text-gray-600 mt-2">{clubApplicationMessage}</p>}
+          {clubApplicationMessage && (
+            <p className="text-sm text-gray-600 mt-2">
+              {clubApplicationMessage}
+            </p>
+          )}
         </div>
       </div>
 
@@ -216,7 +264,9 @@ export default function AdminDashboard() {
         <form onSubmit={handleCreateEvent} className="mt-4 space-y-3">
           <input
             value={eventForm.title}
-            onChange={(e) => setEventForm((prev) => ({ ...prev, title: e.target.value }))}
+            onChange={(e) =>
+              setEventForm((prev) => ({ ...prev, title: e.target.value }))
+            }
             className="w-full p-2 border rounded"
             placeholder="Etkinlik başlığı"
             aria-label="Etkinlik başlığı"
@@ -225,7 +275,9 @@ export default function AdminDashboard() {
           />
           <textarea
             value={eventForm.description}
-            onChange={(e) => setEventForm((prev) => ({ ...prev, description: e.target.value }))}
+            onChange={(e) =>
+              setEventForm((prev) => ({ ...prev, description: e.target.value }))
+            }
             className="w-full p-2 border rounded"
             rows={3}
             placeholder="Etkinlik açıklaması"
@@ -233,49 +285,87 @@ export default function AdminDashboard() {
           />
           <input
             value={eventForm.location}
-            onChange={(e) => setEventForm((prev) => ({ ...prev, location: e.target.value }))}
+            onChange={(e) =>
+              setEventForm((prev) => ({ ...prev, location: e.target.value }))
+            }
             className="w-full p-2 border rounded"
             placeholder="Konum"
             aria-label="Etkinlik konumu"
           />
-          <div className="grid gap-3 md:grid-cols-2">
-            <input
-              type="datetime-local"
-              value={eventForm.startAt}
-              onChange={(e) => setEventForm((prev) => ({ ...prev, startAt: e.target.value }))}
-              className="w-full p-2 border rounded"
-              aria-label="Etkinlik başlangıç"
-              data-testid="admin-event-start"
-              required
-            />
-            <input
-              type="datetime-local"
-              value={eventForm.endAt}
-              onChange={(e) => setEventForm((prev) => ({ ...prev, endAt: e.target.value }))}
-              className="w-full p-2 border rounded"
-              aria-label="Etkinlik bitiş"
-              data-testid="admin-event-end"
-              required
-            />
+          <div className="grid gap-5 grid-cols-3">
+            <div className="flex flex-row w-full items-center">
+              <label htmlFor="event-start" className="w-fit mr-2">
+                Başlangıç :
+              </label>
+              <input
+                id="event-start"
+                type="datetime-local"
+                value={eventForm.startAt}
+                onChange={(e) =>
+                  setEventForm((prev) => ({ ...prev, startAt: e.target.value }))
+                }
+                className="p-2 border rounded flex-1"
+                aria-label="Etkinlik başlangıç"
+                data-testid="admin-event-start"
+                required
+              />
+            </div>
+
+            <div className="flex flex-row w-full items-center">
+              <label htmlFor="event-end" className="w-fit mr-2">
+                Bitiş :
+              </label>
+              <input
+                id="event-end"
+                type="datetime-local"
+                value={eventForm.endAt}
+                onChange={(e) =>
+                  setEventForm((prev) => ({ ...prev, endAt: e.target.value }))
+                }
+                className="flex-1 p-2 border rounded"
+                aria-label="Etkinlik bitiş"
+                data-testid="admin-event-end"
+                required
+              />
+            </div>
+            <div className="flex flex-row w-full items-center">
+              <label htmlFor="capacity" className="w-fit mr-2">
+                Kapasite :
+              </label>
+              <input
+                id="capacity"
+                type="number"
+                min="0"
+                value={eventForm.capacity}
+                onChange={(e) =>
+                  setEventForm((prev) => ({
+                    ...prev,
+                    capacity: e.target.value,
+                  }))
+                }
+                className="flex-1 p-2 border rounded"
+                placeholder="Kapasite"
+                aria-label="Etkinlik kapasitesi"
+                data-testid="admin-event-capacity"
+              />
+            </div>
           </div>
-          <input
-            type="number"
-            min="0"
-            value={eventForm.capacity}
-            onChange={(e) => setEventForm((prev) => ({ ...prev, capacity: e.target.value }))}
-            className="w-full p-2 border rounded"
-            placeholder="Kapasite"
-            aria-label="Etkinlik kapasitesi"
-            data-testid="admin-event-capacity"
-          />
-          <button className="px-4 py-2 bg-accent text-white rounded" data-testid="admin-event-create">Oluştur</button>
+
+          <button
+            className="px-4 py-2 bg-accent text-black border border-slate-950 rounded"
+            data-testid="admin-event-create"
+          >
+            Oluştur
+          </button>
         </form>
       </div>
 
       <div className="bg-white p-6 rounded-md shadow">
         <h3 className="text-lg font-semibold">Etkinlikler</h3>
         <div className="mt-4 space-y-3">
-          {events.length === 0 && <p className="text-gray-600">Henüz etkinlik yok.</p>}
+          {events.length === 0 && (
+            <p className="text-gray-600">Henüz etkinlik yok.</p>
+          )}
           {events.map((event) => (
             <div
               key={event.id}
@@ -286,7 +376,8 @@ export default function AdminDashboard() {
               <div>
                 <p className="font-semibold">{event.title}</p>
                 <p className="text-sm text-gray-600">
-                  {new Date(event.startAt).toLocaleString("tr-TR")} · {event.status}
+                  {new Date(event.startAt).toLocaleString("tr-TR")} ·{" "}
+                  {event.status}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -314,37 +405,60 @@ export default function AdminDashboard() {
         </div>
         <form onSubmit={handleUploadDocument} className="mt-6 space-y-3">
           <h4 className="font-semibold">Etkinlik Belgesi Yükle</h4>
-          <select
-            value={documentEventId}
-            onChange={(e) => setDocumentEventId(e.target.value)}
-            className="w-full md:w-1/2 p-2 border rounded"
-            aria-label="Belge etkinlik seçimi"
-            data-testid="admin-doc-event"
-            required
+          <div className="flex flex-row gap-5">
+            <select
+              value={documentEventId}
+              onChange={(e) => setDocumentEventId(e.target.value)}
+              className="flex-1 p-2 border rounded"
+              aria-label="Belge etkinlik seçimi"
+              data-testid="admin-doc-event"
+              required
+            >
+              <option value="">Etkinlik seç</option>
+              {events.map((event) => (
+                <option key={event.id} value={event.id}>
+                  {event.title}
+                </option>
+              ))}
+            </select>
+
+            <button
+              disabled={!documentEventId}
+              onClick={() => documentRef.current?.click()}
+              className="flex-1 border border-slate-950 text-slate-950 rounded disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {documentFile ? documentFile.name : "Belge Yükle"}
+            </button>
+            <input
+              ref={documentRef}
+              hidden
+              type="file"
+              onChange={(e) => setDocumentFile(e.target.files?.[0] ?? null)}
+              className="flex-1 border border-slate-950 rounded text-center"
+              accept=".pdf,image/png,image/jpeg"
+              aria-label="Belge dosyası"
+              data-testid="admin-doc-file"
+            />
+          </div>
+
+          <button
+            className="px-4 py-2 border rounded"
+            data-testid="admin-doc-submit"
           >
-            <option value="">Etkinlik seç</option>
-            {events.map((event) => (
-              <option key={event.id} value={event.id}>{event.title}</option>
-            ))}
-          </select>
-          <input
-            type="file"
-            onChange={(e) => setDocumentFile(e.target.files?.[0] ?? null)}
-            className="w-full md:w-1/2"
-            accept=".pdf,image/png,image/jpeg"
-            aria-label="Belge dosyası"
-            data-testid="admin-doc-file"
-            required
-          />
-          <button className="px-4 py-2 border rounded" data-testid="admin-doc-submit">Belge Gönder</button>
-          {documentMessage && <p className="text-sm text-gray-600">{documentMessage}</p>}
+            Belge Gönder
+          </button>
+          {documentMessage && (
+            <p className="text-sm text-gray-600">{documentMessage}</p>
+          )}
         </form>
       </div>
 
       <div className="bg-white p-6 rounded-md shadow">
         <h3 className="text-lg font-semibold">Kulüp Başvuruları</h3>
         <div className="mt-4 space-y-3">
-          {applications.length === 0 && <p className="text-gray-600">Başvuru yok.</p>}
+          {applications.length === 0 && (
+            <p className="text-gray-600">Başvuru yok.</p>
+          )}
           {applications.map((app) => (
             <div key={app.id} className="border rounded p-4 space-y-2">
               <div className="flex flex-col gap-1">
@@ -354,7 +468,12 @@ export default function AdminDashboard() {
               </div>
               <input
                 value={applicationNotes[app.id] ?? ""}
-                onChange={(e) => setApplicationNotes((prev) => ({ ...prev, [app.id]: e.target.value }))}
+                onChange={(e) =>
+                  setApplicationNotes((prev) => ({
+                    ...prev,
+                    [app.id]: e.target.value,
+                  }))
+                }
                 className="w-full p-2 border rounded"
                 placeholder="Not ekle"
                 aria-label="Kulüp başvurusu notu"
@@ -383,7 +502,12 @@ export default function AdminDashboard() {
         <form onSubmit={handleCreateAnnouncement} className="mt-4 space-y-3">
           <input
             value={announcementForm.title}
-            onChange={(e) => setAnnouncementForm((prev) => ({ ...prev, title: e.target.value }))}
+            onChange={(e) =>
+              setAnnouncementForm((prev) => ({
+                ...prev,
+                title: e.target.value,
+              }))
+            }
             className="w-full p-2 border rounded"
             placeholder="Başlık"
             aria-label="Duyuru başlığı"
@@ -391,7 +515,12 @@ export default function AdminDashboard() {
           />
           <textarea
             value={announcementForm.content}
-            onChange={(e) => setAnnouncementForm((prev) => ({ ...prev, content: e.target.value }))}
+            onChange={(e) =>
+              setAnnouncementForm((prev) => ({
+                ...prev,
+                content: e.target.value,
+              }))
+            }
             className="w-full p-2 border rounded"
             rows={3}
             placeholder="İçerik"
@@ -400,20 +529,32 @@ export default function AdminDashboard() {
           />
           <select
             value={announcementForm.status}
-            onChange={(e) => setAnnouncementForm((prev) => ({ ...prev, status: e.target.value }))}
+            onChange={(e) =>
+              setAnnouncementForm((prev) => ({
+                ...prev,
+                status: e.target.value,
+              }))
+            }
             className="w-full p-2 border rounded"
             aria-label="Duyuru durumu"
           >
             <option value="Published">Yayınla</option>
             <option value="Hidden">Gizle</option>
           </select>
-          <button className="px-4 py-2 bg-accent text-white rounded">Duyuru Oluştur</button>
+          <button className="px-4 py-2 bg-accent text-slate-950 border border-slate-950 rounded">
+            Duyuru Oluştur
+          </button>
         </form>
 
         <div className="mt-4 space-y-3">
-          {announcements.length === 0 && <p className="text-gray-600">Henüz duyuru yok.</p>}
+          {announcements.length === 0 && (
+            <p className="text-gray-600">Henüz duyuru yok.</p>
+          )}
           {announcements.map((announcement) => (
-            <div key={announcement.id} className="border rounded p-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div
+              key={announcement.id}
+              className="border rounded p-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between"
+            >
               <div>
                 <p className="font-semibold">{announcement.title}</p>
                 <p className="text-sm text-gray-600">{announcement.status}</p>
@@ -421,7 +562,9 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-2">
                 {announcement.status !== "Published" && (
                   <button
-                    onClick={() => handleToggleAnnouncement(announcement, "Published")}
+                    onClick={() =>
+                      handleToggleAnnouncement(announcement, "Published")
+                    }
                     className="text-sm px-3 py-2 border rounded"
                   >
                     Yayınla
@@ -429,7 +572,9 @@ export default function AdminDashboard() {
                 )}
                 {announcement.status !== "Hidden" && (
                   <button
-                    onClick={() => handleToggleAnnouncement(announcement, "Hidden")}
+                    onClick={() =>
+                      handleToggleAnnouncement(announcement, "Hidden")
+                    }
                     className="text-sm px-3 py-2 border rounded"
                   >
                     Gizle
